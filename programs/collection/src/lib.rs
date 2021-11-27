@@ -156,7 +156,7 @@ pub struct Create<'info> {
 impl<'info> Create<'info> {
     fn initialize_mint_context(&self) -> CpiContext<'_, '_, '_, 'info, InitializeMint<'info>> {
         CpiContext::new(
-            elf.token_program.to_account_info(),
+            self.token_program.to_account_info(),
             InitializeMint {
                 mint: self.mint.clone(),
                 rent: self.rent.to_account_info(),
@@ -196,11 +196,11 @@ pub struct Claim<'info> {
     pub collection: Loader<'info, Collection>,
 
     /// The token for which the user claims
-    #[account(constraint = collection.load()?.mints[index as usize].mint == claimed_token.key()))]
+    #[account(constraint = collection.load()?.mints[index as usize].mint == claimed_token.key())]
     pub claimed_token: AccountInfo<'info>,
 
     /// The account holding the claimed token
-    #[account(constraint = claimed_token_account.owner == owner.key() && claimed_token_account.mint == claimed_token.key()]
+    #[account(constraint = claimed_token_account.owner == owner.key() && claimed_token_account.mint == claimed_token.key())]
     pub claimed_token_account: Account<'info, TokenAccount>,
 
     /// The owner of the token
